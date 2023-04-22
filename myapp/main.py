@@ -24,7 +24,10 @@ width = 0
 
 
 def file_write():
-    file_name = "maze"+str(datetime.now().date())+"-"+str(datetime.now().hour)+str(datetime.now().minute)+str(datetime.now().second)+".maze"
+    if g == []:
+        mb.showerror("Error", "Before saving, first generate the maze")
+
+    file_name = "data\maze"+str(datetime.now().date())+"-"+str(datetime.now().hour)+str(datetime.now().minute)+str(datetime.now().second)+".maze"
     file = open(file_name, 'wb+')
     bt = ("IHATEPYTHON!"+'\n').encode()
     file.write(bt)
@@ -81,10 +84,22 @@ def file_read():
 def gen_click():
     global g, height, width
 
-    height = int(height_field.get())
-    width = int(width_field.get())
+    sh = height_field.get()
+    sw = width_field.get()
+    if not (sh.isnumeric() and sw.isnumeric()):
+        mb.showerror("Error", "The height and width parameters must be natural numbers")
+        return
 
-    #print(height, width)
+    height = int(sh)
+    width = int(sw)
+
+    if height<=0 or width<=0:
+        mb.showerror("Error", "The height and width parameters must be natural numbers")
+        return
+
+    if max(height, width) > 100:
+        mb.showerror("Error", "The height and width parameters must not exceed 100")
+        return
 
     g = [[] for i in range(width * height)]
     component = [i for i in range(width * height)]
@@ -116,14 +131,12 @@ def gen_click():
             g[vy * width + vx].append(uy*width+ux)
             count_comp -= 1
     image()
-    global use_count
-    use_count += 1
 
 
 def paint(way):
     global x_img, y_img, height, width
     image()
-    center_size = square_size//6
+    center_size = max(square_size//6, 1)
     for q in range(len(way)):
         x = way[q] % width
         y = way[q]//width
@@ -134,8 +147,8 @@ def paint(way):
         cx = (lg+rg)//2
         cy = (bg+hg)//2
 
-        for i in range(cy-center_size//2, cy+center_size//2):
-            for j in range(cx - center_size // 2, cx + center_size // 2):
+        for i in range(cy-center_size//2, cy+center_size//2+1):
+            for j in range(cx - center_size // 2, cx + center_size // 2 +1):
                 img[i][j] = [0, 255, 0]
 
     for q in range(len(way)-1):
@@ -162,8 +175,8 @@ def paint(way):
             lh_y = cy2 - center_size // 2
             rb_x = max(cx1 - center_size // 2, cx2 - center_size//2)
             rb_y = cy2 + center_size // 2
-            for i in range(lh_y, rb_y):
-                for j in range(lh_x, rb_x):
+            for i in range(lh_y, rb_y+1):
+                for j in range(lh_x, rb_x+1):
                     img[i][j] = [0, 255, 0]
 
         else:
@@ -171,8 +184,8 @@ def paint(way):
             lh_x = cx2 - center_size // 2
             rb_y = max(cy1 - center_size // 2, cy2 - center_size // 2)
             rb_x = cx2 + center_size // 2
-            for i in range(lh_y, rb_y):
-                for j in range(lh_x, rb_x):
+            for i in range(lh_y, rb_y+1):
+                for j in range(lh_x, rb_x+1):
                     img[i][j] = [0, 255, 0]
 
     cv2.imwrite("C:/Users/user/PycharmProjects/labirint/maze.png", img)
@@ -186,10 +199,25 @@ def paint(way):
 
 def build_way():
     global height, width
-    x1 = int(x1_field.get())-1
-    y1 = int(y1_field.get())-1
-    x2 = int(x2_field.get())-1
-    y2 = int(y2_field.get())-1
+
+    sx1 = x1_field.get()
+    sy1 = y1_field.get()
+    sx2 = x2_field.get()
+    sy2 = y2_field.get()
+
+    if not(sx1.isnumeric() and sx2.isnumeric() and sy1.isnumeric() and sy2.isnumeric()):
+        mb.showerror("Error", "Сell coordinates must be natural numbers")
+
+    x1 = int(sx1)-1
+    y1 = int(sy1)-1
+    x2 = int(sx2)-1
+    y2 = int(sy2)-1
+
+    if not (x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0):
+        mb.showerror("Error", "Сell coordinates must be natural numbers")
+    if not (x1 < width and y1 < height and x2 < width and y2 < height):
+        mb.showerror("Error", "Сoordinates exceed maze dimensions")
+
 
     s = y1*height+x1
     f = y2*height+x2
@@ -225,9 +253,62 @@ def build_way():
     way.append(s)
     paint(way)
 
+def replace(a, b, vect):
+    for i in range(len(vect)):
+        if vect[i] == a:
+            vect[i] = b
+
+
+def image():
+    global img, line_size, square_size, img_h, img_w, x_img, y_img, height, width, g
+
+   # for i in range(len(x_nums)):
+       # x_nums[i].
+
+    x_img = 150
+    y_img = 20
+
+    square_size = 400//max(height, width)
+    line_size = square_size//10
+
+    img_h = height*square_size+line_size*(height-1)
+    img_w = width*square_size+line_size*(width-1)
+
+    img = np.zeros((img_h, img_w, 3))
+    for i in range(img_h):
+        for j in range(img_w):
+            img[i][j] = [255, 255, 255]
+
+    for i in range(height):
+        for j in range(width):
+            if (i != height-1) and (not (i*width+j+width in g[i*width+j])):
+                posy = (square_size+line_size)*(i+1)
+                posx1 = (square_size+line_size)*j
+                posx2 = (square_size+line_size)*j+square_size-1
+                for pos in range(posx1, min(posx2+line_size+1, img_w)):
+                    img[posy][pos] = [0, 0, 0]
+
+            if (j != width-1) and (not (i*width+j+1 in g[i*width+j])):
+                posy1 = (square_size+line_size)*i
+                posy2 = (square_size+line_size)*i+square_size-1
+                posx = (square_size+line_size)*(j+1)
+                for pos in range(posy1, min(posy2+line_size+1, img_h)):
+                    img[pos][posx] = [0, 0, 0]
+
+    cv2.imwrite("C:/Users/user/PycharmProjects/labirint/maze.png", img)
+    h_image = PhotoImage(file="C:/Users/user/PycharmProjects/labirint/maze.png")
+    global maze_img
+    maze_img.image = h_image
+    maze_img['image'] = maze_img.image
+    maze_img.place(x=x_img, y=y_img)
+    return img
+
 window = Tk()
 window.title("Maze generator")
 window.geometry("700x500")
+icon = PhotoImage(file="icon.png")
+window.iconphoto(False, icon)
+#window.iconbitmap(default="track_changes_icon_251768.ico")
 
 maze_img = Label(window)
 
@@ -290,59 +371,6 @@ save_button.place(x=1, y=290)
 
 import_button = Button(text="Import", command=file_read, width=14)
 import_button.place(x=1, y=330)
-
-#x1_field = Entry(window, text=)
-
-def replace(a, b, vect):
-    for i in range(len(vect)):
-        if vect[i] == a:
-            vect[i] = b
-
-
-def image():
-    global img, line_size, square_size, img_h, img_w, x_img, y_img, height, width, g
-
-   # for i in range(len(x_nums)):
-       # x_nums[i].
-
-    x_img = 150
-    y_img = 20
-
-    square_size = 400//max(height, width)
-    line_size = square_size//10
-
-    img_h = height*square_size+line_size*(height-1)
-    img_w = width*square_size+line_size*(width-1)
-
-    img = np.zeros((img_h, img_w, 3))
-    for i in range(img_h):
-        for j in range(img_w):
-            img[i][j] = [255, 255, 255]
-
-    for i in range(height):
-        for j in range(width):
-            if (i != height-1) and (not (i*width+j+width in g[i*width+j])):
-                posy = (square_size+line_size)*(i+1)
-                posx1 = (square_size+line_size)*j
-                posx2 = (square_size+line_size)*j+square_size-1
-                for pos in range(posx1, min(posx2+line_size+1, img_w)):
-                    img[posy][pos] = [0, 0, 0]
-
-            if (j != width-1) and (not (i*width+j+1 in g[i*width+j])):
-                posy1 = (square_size+line_size)*i
-                posy2 = (square_size+line_size)*i+square_size-1
-                posx = (square_size+line_size)*(j+1)
-                for pos in range(posy1, min(posy2+line_size+1, img_h)):
-                    img[pos][posx] = [0, 0, 0]
-
-    cv2.imwrite("C:/Users/user/PycharmProjects/labirint/maze.png", img)
-    h_image = PhotoImage(file="C:/Users/user/PycharmProjects/labirint/maze.png")
-    global maze_img
-    maze_img.image = h_image
-    maze_img['image'] = maze_img.image
-    maze_img.place(x=x_img, y=y_img)
-    return img
-
 
 window.mainloop()
 
