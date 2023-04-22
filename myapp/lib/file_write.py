@@ -1,5 +1,8 @@
 def file_write():
-    file_name = "maze"+str(datetime.now().date())+"-"+str(datetime.now().hour)+str(datetime.now().minute)+str(datetime.now().second)+".maze"
+    if g == []:
+        mb.showerror("Error", "Before saving, first generate the maze")
+
+    file_name = "data\maze"+str(datetime.now().date())+"-"+str(datetime.now().hour)+str(datetime.now().minute)+str(datetime.now().second)+".maze"
     file = open(file_name, 'wb+')
     bt = ("IHATEPYTHON!"+'\n').encode()
     file.write(bt)
