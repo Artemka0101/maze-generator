@@ -1,9 +1,22 @@
 def gen_click():
     global g, height, width
 
-    height = int(height_field.get())
-    width = int(width_field.get())
+    sh = height_field.get()
+    sw = width_field.get()
+    if not (sh.isnumeric() and sw.isnumeric()):
+        mb.showerror("Error", "The height and width parameters must be natural numbers")
+        return
 
+    height = int(sh)
+    width = int(sw)
+
+    if height<=0 or width<=0:
+        mb.showerror("Error", "The height and width parameters must be natural numbers")
+        return
+
+    if max(height, width) > 100:
+        mb.showerror("Error", "The height and width parameters must not exceed 100")
+        return
 
     g = [[] for i in range(width * height)]
     component = [i for i in range(width * height)]
