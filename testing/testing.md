@@ -14,6 +14,7 @@
 ![image](https://user-images.githubusercontent.com/64738836/233797714-d0f67b9f-7cde-4500-8a9a-b109989bc865.png) ![image](https://user-images.githubusercontent.com/64738836/233797731-13cc9cf8-21ab-48de-a9ff-40223f9e1837.png)
 
 При получении в одной из x-координат числа больше width или в одной из y-координат числа больше height, выводится сообщение об ошибке:
+
 ![image](https://user-images.githubusercontent.com/64738836/233798002-f98bdcc5-f4c2-4262-a447-efdeb59a7503.png)
 
 При нажатии на кнопку "Save", лабиринт сохраняется в папку data:
