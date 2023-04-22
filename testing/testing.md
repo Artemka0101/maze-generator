@@ -30,4 +30,7 @@
 
 ![image](https://user-images.githubusercontent.com/64738836/233798117-b6f7ea82-9348-4e2b-813c-4e42fb927618.png)
 
+При попытке импортировать файл, не являющийся лабиринтом, выводится сообщение об ошибке:
+
+![image](https://user-images.githubusercontent.com/64738836/233798401-0efc21f7-9004-41ee-b9b6-02831b99098f.png) ![image](https://user-images.githubusercontent.com/64738836/233798412-ddc3c704-9365-45ba-9f19-aafac18d0c82.png)
 
