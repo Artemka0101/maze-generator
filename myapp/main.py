@@ -24,6 +24,7 @@ width = 0
 
 
 def file_write():
+    global g, height, width
     if g == []:
         mb.showerror("Error", "Before saving, first generate the maze")
 
@@ -46,7 +47,9 @@ def file_write():
 
 
 def file_read():
-    global g, height, width
+    global g
+    global height
+    global width
 
     filepath = filedialog.askopenfilename()
     file = open(filepath, 'rb')
@@ -198,8 +201,9 @@ def paint(way):
 
 
 def build_way():
-    global height, width
+    global height, width, g
 
+    print(height, width)
     sx1 = x1_field.get()
     sy1 = y1_field.get()
     sx2 = x2_field.get()
@@ -207,20 +211,25 @@ def build_way():
 
     if not(sx1.isnumeric() and sx2.isnumeric() and sy1.isnumeric() and sy2.isnumeric()):
         mb.showerror("Error", "Сell coordinates must be natural numbers")
+        return
 
     x1 = int(sx1)-1
     y1 = int(sy1)-1
     x2 = int(sx2)-1
     y2 = int(sy2)-1
 
+    print(x1, y1, x2, y2)
+
     if not (x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0):
         mb.showerror("Error", "Сell coordinates must be natural numbers")
+        return
     if not (x1 < width and y1 < height and x2 < width and y2 < height):
         mb.showerror("Error", "Сoordinates exceed maze dimensions")
+        return
 
 
-    s = y1*height+x1
-    f = y2*height+x2
+    s = y1*width+x1
+    f = y2*width+x2
 
     q = deque()
     cnt = 0
@@ -251,6 +260,7 @@ def build_way():
         way.append(c)
         c = p[c]
     way.append(s)
+    print(way)
     paint(way)
 
 def replace(a, b, vect):
@@ -306,7 +316,7 @@ def image():
 window = Tk()
 window.title("Maze generator")
 window.geometry("700x500")
-icon = PhotoImage(file="icon.png")
+icon = PhotoImage(file="static/images/icon.png")
 window.iconphoto(False, icon)
 #window.iconbitmap(default="track_changes_icon_251768.ico")
 
