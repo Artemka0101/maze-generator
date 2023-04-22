@@ -1,7 +1,7 @@
 def file_write():
+    global g, height, width
     if g == []:
         mb.showerror("Error", "Before saving, first generate the maze")
-        return
 
     file_name = "data\maze"+str(datetime.now().date())+"-"+str(datetime.now().hour)+str(datetime.now().minute)+str(datetime.now().second)+".maze"
     file = open(file_name, 'wb+')
