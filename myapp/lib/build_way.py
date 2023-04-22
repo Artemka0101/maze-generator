@@ -1,9 +1,24 @@
 def build_way():
     global height, width
-    x1 = int(x1_field.get())-1
-    y1 = int(y1_field.get())-1
-    x2 = int(x2_field.get())-1
-    y2 = int(y2_field.get())-1
+
+    sx1 = x1_field.get()
+    sy1 = y1_field.get()
+    sx2 = x2_field.get()
+    sy2 = y2_field.get()
+
+    if not(sx1.isnumeric() and sx2.isnumeric() and sy1.isnumeric() and sy2.isnumeric()):
+        mb.showerror("Error", "Сell coordinates must be natural numbers")
+
+    x1 = int(sx1)-1
+    y1 = int(sy1)-1
+    x2 = int(sx2)-1
+    y2 = int(sy2)-1
+
+    if not (x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0):
+        mb.showerror("Error", "Сell coordinates must be natural numbers")
+    if not (x1 < width and y1 < height and x2 < width and y2 < height):
+        mb.showerror("Error", "Сoordinates exceed maze dimensions")
+
 
     s = y1*height+x1
     f = y2*height+x2
