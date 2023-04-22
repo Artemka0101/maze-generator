@@ -66,7 +66,7 @@ def file_read():
     data.pop(0)
     height = int(data[0])
     width = int(data[1])
-    print(height, width)
+    #print(height, width)
     for i in range(2):
         data.pop(0)
 
@@ -203,7 +203,7 @@ def paint(way):
 def build_way():
     global height, width, g
 
-    print(height, width)
+   # print(height, width)
     sx1 = x1_field.get()
     sy1 = y1_field.get()
     sx2 = x2_field.get()
@@ -218,7 +218,7 @@ def build_way():
     x2 = int(sx2)-1
     y2 = int(sy2)-1
 
-    print(x1, y1, x2, y2)
+   # print(x1, y1, x2, y2)
 
     if not (x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0):
         mb.showerror("Error", "Сell coordinates must be natural numbers")
@@ -260,7 +260,7 @@ def build_way():
         way.append(c)
         c = p[c]
     way.append(s)
-    print(way)
+  #  print(way)
     paint(way)
 
 def replace(a, b, vect):
