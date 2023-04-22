@@ -1,5 +1,7 @@
 def file_read():
-    global g, height, width
+    global g
+    global height
+    global width
 
     filepath = filedialog.askopenfilename()
     file = open(filepath, 'rb')
