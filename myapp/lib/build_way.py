@@ -1,5 +1,5 @@
 def build_way():
-    global height, width
+    global height, width, g
 
     sx1 = x1_field.get()
     sy1 = y1_field.get()
@@ -8,6 +8,7 @@ def build_way():
 
     if not(sx1.isnumeric() and sx2.isnumeric() and sy1.isnumeric() and sy2.isnumeric()):
         mb.showerror("Error", "Сell coordinates must be natural numbers")
+        return
 
     x1 = int(sx1)-1
     y1 = int(sy1)-1
@@ -16,12 +17,14 @@ def build_way():
 
     if not (x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0):
         mb.showerror("Error", "Сell coordinates must be natural numbers")
+        return
     if not (x1 < width and y1 < height and x2 < width and y2 < height):
         mb.showerror("Error", "Сoordinates exceed maze dimensions")
+        return
 
 
-    s = y1*height+x1
-    f = y2*height+x2
+    s = y1*width+x1
+    f = y2*width+x2
 
     q = deque()
     cnt = 0
@@ -52,4 +55,10 @@ def build_way():
         way.append(c)
         c = p[c]
     way.append(s)
+    print(way)
     paint(way)
+
+def replace(a, b, vect):
+    for i in range(len(vect)):
+        if vect[i] == a:
+            vect[i] = b
