@@ -34,8 +34,8 @@ def image():
                 for pos in range(posy1, min(posy2+line_size+1, img_h)):
                     img[pos][posx] = [0, 0, 0]
 
-    cv2.imwrite("C:/Users/user/PycharmProjects/labirint/maze.png", img)
-    h_image = PhotoImage(file="C:/Users/user/PycharmProjects/labirint/maze.png")
+    cv2.imwrite("data/maze.png", img)
+    h_image = PhotoImage(file="data/maze.png")
     global maze_img
     maze_img.image = h_image
     maze_img['image'] = maze_img.image
